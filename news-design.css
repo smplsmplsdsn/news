@@ -1,0 +1,99 @@
+@charset "utf-8";
+
+.js-news-save.off,
+.js-news-reload.off,
+.js-news-edit.off,
+.js-news.off {
+  display: none;
+}
+
+.news-edit {
+  margin: 20px 10px;
+  padding: 20px;
+  border: 2px solid #000;
+  border-radius: 30px;
+  background: #fff;
+  font-size: 13px;
+}
+
+.news-edit input,
+.news-edit textarea {
+  height: 40px;
+  margin: 0;
+  vertical-align: top;
+  font-size: 16px;
+}
+
+.news-edit textarea {
+  width: 100%;
+  line-height: 1.2;
+}
+
+
+.news-edit a {
+  display: flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 10px;
+  cursor: pointer;
+}
+
+.news-edit__add {
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  padding: 0 0 10px;
+}
+
+.news-edit__nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0 0;
+  border-top: 1px solid #000;
+}
+
+.news-edit__template {
+  display: none;
+}
+
+.news-edit__list a {
+  white-space: nowrap;
+}
+
+.news-edit__unit {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  
+  padding: 0 0 20px;
+}
+
+.news-edit__form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.news-edit__date {
+  min-width: 12em;
+}
+
+.news-edit__text {
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .news-edit textarea {
+    height: 100px;
+  }
+  
+  .news-edit__form {
+    padding: 0 10px 0 0;
+    flex-wrap: wrap;
+  }
+}
+
+
+
+
