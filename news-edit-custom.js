@@ -21,9 +21,7 @@ const setNews = (data = []) => {
   }
 
   // データをセットして表示・非表示にする
-  const _news = document.getElementsByClassName('js-news-view')[0],
-        _data = document.getElementsByClassName('js-news-data')[0]
+  const _data = document.getElementsByClassName('js-news-data')[0]
 
-  _news.style.display = (html != '')? 'block': 'none'
   _data.innerHTML = html
 }

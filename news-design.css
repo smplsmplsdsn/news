@@ -2,8 +2,7 @@
 
 .js-news-save.off,
 .js-news-reload.off,
-.js-news-edit.off,
-.js-news.off {
+.js-news-edit.off {
   display: none;
 }
 

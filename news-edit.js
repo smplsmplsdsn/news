@@ -34,7 +34,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 </aside>
 `
   
-  const json = _news_edit_setting.getAttribute('data-json')
+  const json = _news.getAttribute('data-json')
 
 
   // お知らせ編集エリア
@@ -171,12 +171,23 @@ window.addEventListener('DOMContentLoaded', (event) => {
   }
   
   /**
+   * 編集画面をセットする
+   */
+  const setNewsEdit = () => {
+    _news_list.innerHTML = '';
+    _news_save.classList.remove('off');
+    _news_again.classList.add('off');
+    _news_edit.classList.remove('off')
+    loadNews()
+    return false    
+  }
+  
+  /**
    * 編集画面を閉じる
    */
   const closeNewsEdit = () => {
     _news_list.innerHTML = '';
     _news_edit.classList.add('off')
-    _news.classList.remove('off')
     return false;
   }
   
@@ -208,28 +219,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
   //　編集するボタンがあるか判別する
   if (_news_edit_view) {
     
-    /*
-     * 編集画面を表示する
-     */
-    _news_edit_view.addEventListener('click', () => {
-      _news_save.classList.remove('off');
-      _news_again.classList.add('off');
-      _news_edit.classList.remove('off')
-      _news.classList.add('off')
-      loadNews()
-      return false;
-    })
-
-    /*
-     * 再読み込みする
-     */
-    _news_again.addEventListener('click', () => {
-      _news_list.innerHTML = '';
-      _news_edit.classList.remove('off')
-      _news.classList.add('off')
-      loadNews()
-      return false;
-    })
+    // 編集画面を表示する・再読み込みする
+    _news_edit_view.addEventListener('click', setNewsEdit)
+    _news_again.addEventListener('click', setNewsEdit)
 
     // 行を追加する
     _news_add.addEventListener('click', addNewsRow)
