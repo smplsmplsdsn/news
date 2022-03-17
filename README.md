@@ -12,6 +12,10 @@ PHPを使ってJSONファイルを生成しているため、phpが使える環�
 - news-edit.css
 - news-json.php
 
+このうち修正するのは、　下記2ファイル
+- news-config.php
+- news-edit-custom.js
+
 ## 設置方法
 
 ### html
