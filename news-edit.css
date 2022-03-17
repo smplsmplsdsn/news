@@ -1,8 +1,10 @@
 @charset "utf-8";
 
+.js-news.off,
 .js-news-save.off,
 .js-news-reload.off,
-.js-news-edit.off {
+.js-news-edit.off,
+.js-news-link.off {
   display: none;
 }
 

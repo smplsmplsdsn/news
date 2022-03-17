@@ -3,25 +3,14 @@
  *
  * ATTENTION テキストは改行コードを<br>タグに置き換えています
  *
- * @param (array) data 保存したお知らせ情報(日付とテキスト)のデータ
+ * @param (string) data
+ * @param (string) text
  */
-const setNews = (data = []) => {
-  let html = '',
-      i
+const setNews = (date, text) => {
+  return `
 
-  for (i in data) {
-    if (data[i].date) {
+<dt>${date}</dt>
+<dd>${text}</dd>
 
-      // 自由にコーディング
-      html += `
-<dt>${data[i].date}</dt>
-<dd>${data[i].text.replace(/\r?\n/g, '<br>')}</dd>
 `
-    }
-  }
-
-  // データをセットして表示・非表示にする
-  const _data = document.getElementsByClassName('js-news-data')[0]
-
-  _data.innerHTML = html
 }

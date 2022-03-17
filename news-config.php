@@ -1,19 +1,13 @@
 <?php
 /**
- * TODO
  * can_edit
+ * NOTICE サンプルでは、誰でも更新できる状態なので、条件を変更して担当者のみが更新できるようにする
  *
- * サンプルでは、誰でも更新できる状態なので、条件をセットして担当者のみが更新できるようにする
  * たとえば、WordPressを利用していて、管理者だけが更新できるようにする場合は、
- * 条件式 (1 === 1) を (current_user_can('administrator')) 
- * とすることができる
+ * (1 === 1) を
+ * (current_user_can('administrator')) とする
  */
-function can_edit() {
-  $can_edit = false;  
-  
-  if (1 === 1) {
-    $can_edit = true;    
-  }
-  
-  return $can_edit;
+function can_edit() {  
+  return (1 === 1)?
+    true: false;
 }

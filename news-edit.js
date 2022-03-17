@@ -1,13 +1,23 @@
 window.addEventListener('DOMContentLoaded', (event) => {
   
-  // 別途、htmlファイルに「js-news」「js-news-edit-view」のCSSクラス名をセットする必要あり
+  /*
+   * htmlファイルに「js-news」「js-news-data」のCSSクラス名をセットするには必須
+   * 「js-news-link」は編集権限がある場合にセットする必要あり
+   */
   const _news = document.getElementsByClassName('js-news')[0]
-  const _news_edit_view = document.getElementsByClassName('js-news-edit-view')[0]
-
+  const _news_data = document.getElementsByClassName('js-news-data')[0]
+  const json = _news.getAttribute('data-json')
   
-  const _news_edit_setting = document.getElementsByClassName('js-news-edit-setting')[0]
-
-  _news_edit_setting.innerHTML = `
+  const _news_link = document.getElementsByClassName('js-news-link')[0]
+  const count_link_in_news = _news.getElementsByClassName('js-news-link').length
+  
+  if (!_news || !_news_data) return false
+  
+  if (_news_link) {
+    const create_news_edit_setting = document.createElement('div')
+    
+    create_news_edit_setting.classList.add('js-news-edit-setting')      
+    create_news_edit_setting.innerHTML = `
 <aside class="news-edit off js-news-edit">
 <div class="news-edit__template js-news-template">
 <div class="news-edit__unit js-news-unit">
@@ -33,12 +43,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
 </form>
 </aside>
 `
+    _news.parentNode.insertBefore(create_news_edit_setting, _news.nextSibling);
+  }  
+
   
-  const json = _news.getAttribute('data-json')
-
-
   // お知らせ編集エリア
-  const _news_edit = _news_edit_setting.getElementsByClassName('js-news-edit')[0],
+  const _news_edit_setting = document.getElementsByClassName('js-news-edit-setting')[0],
+        _news_edit = _news_edit_setting.getElementsByClassName('js-news-edit')[0],
         _news_form = _news_edit_setting.getElementsByClassName('js-news-form')[0],
         _news_list = _news_edit_setting.getElementsByClassName('js-news-list')[0],
         _news_add = _news_edit_setting.getElementsByClassName('js-news-add')[0],
@@ -50,7 +61,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
   const _news_template = _news_edit_setting.getElementsByClassName('js-news-template')[0],
         _news_template_unit = _news_template.getElementsByClassName('js-news-unit')[0]  
   
-  let status_saving = 0;    // 0: 準備OK, 1: 通信中, 2: 処理完了直後
+  let status_saving = 0    // 0: 準備OK, 1: 通信中, 2: 処理完了直後
   
   /**
    * データを呼び出す
@@ -64,7 +75,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     .then(data => {
       let i
       
-      if (!is_init && _news_edit_view) {
+      if (!is_init && _news_link) {
         for (i in data) {          
           if (data[i].date && data[i].date != '') {
             addNewsRow(data[i])            
@@ -72,9 +83,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         }        
       }
       
-      if (setNews !== undefined) {
-        setNews(data)
-      }
+      setNewsAllData(data)
     })
     .catch(error => {
 
@@ -85,8 +94,36 @@ window.addEventListener('DOMContentLoaded', (event) => {
       // _news_again.classList.remove('off')        
     });
     
-    return false; 
+    return false
   }
+  
+  
+  /**
+   * データをセットする
+   */
+  const setNewsAllData = (data = []) => {
+    
+    let h = '',
+        i
+
+    for (i in data) {
+      if (data[i].date) {
+        h += setNews(
+          data[i].date,
+          data[i].text.replace(/\r?\n/g, '<br>')
+        )
+      }
+    }
+    _news_data.innerHTML = h
+    
+    if (count_link_in_news === 0) {
+      if (h === '') {
+        _news.classList.add('off')
+      } else {
+        _news.classList.remove('off')
+      }
+    }
+  }  
   
 
   /**
@@ -99,7 +136,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     
     let data = [],
         i = 0,
-        is_valid = true;
+        is_valid = true
 
     if (status_saving === 2) {
       _news_save.innerHTML = '保存する'
@@ -124,9 +161,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
               // 日付が入力されているか確認する
               if (date.trim() == '') {
                 _news_save.innerHTML = '日付をセットしてください'
-                status_saving = 2;
-                is_valid = false;
-                break;
+                status_saving = 2
+                is_valid = false
+                break
               } else {
                 data.push({
                   date: date,
@@ -147,9 +184,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
           })
           .then(response => response.json())
           .then(data => {
-            if (setNews !== undefined) {
-              setNews(data)
-            }
+            setNewsAllData(data)
             _news_save.innerHTML = '保存する'
             status_saving = 0
             closeNewsEdit()
@@ -162,12 +197,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 _news_save.innerHTML = '保存する'
                 status_saving = 0
               }
-            }, 3000);
-          });           
+            }, 3000)
+          })       
         }        
       }
     }
-    return false; 
+    return false
   }
   
   /**
@@ -175,9 +210,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
    */
   const setNewsEdit = () => {
     _news_list.innerHTML = '';
-    _news_save.classList.remove('off');
-    _news_again.classList.add('off');
+    _news_save.classList.remove('off')
+    _news_again.classList.add('off')
     _news_edit.classList.remove('off')
+    _news_link.classList.add('off')
     loadNews()
     return false    
   }
@@ -186,9 +222,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
    * 編集画面を閉じる
    */
   const closeNewsEdit = () => {
-    _news_list.innerHTML = '';
+    _news_list.innerHTML = ''
     _news_edit.classList.add('off')
-    return false;
+    _news_link.classList.remove('off')
+    return false
   }
   
   /**
@@ -207,20 +244,20 @@ window.addEventListener('DOMContentLoaded', (event) => {
     _news_list.appendChild(clone_unit)
 
     clone_unit.getElementsByClassName('js-news-delete')[0].addEventListener('click', function() {
-      clone_unit.remove();
-      return false;
+      clone_unit.remove()
+      return false
     })
-    return false;
+    return false
   }
   
   // データを読み込む
   loadNews(true)
 
   //　編集するボタンがあるか判別する
-  if (_news_edit_view) {
+  if (_news_link) {
     
     // 編集画面を表示する・再読み込みする
-    _news_edit_view.addEventListener('click', setNewsEdit)
+    _news_link.addEventListener('click', setNewsEdit)
     _news_again.addEventListener('click', setNewsEdit)
 
     // 行を追加する
