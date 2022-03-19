@@ -11,6 +11,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
   const _news_link = document.getElementsByClassName('js-news-link')[0]
   const count_link_in_news = _news.getElementsByClassName('js-news-link').length
   
+  let pos = 0
+  
   if (!_news || !_news_data) return false
   
   if (_news_link) {
@@ -43,7 +45,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 </form>
 </aside>
 `
-    _news.parentNode.insertBefore(create_news_edit_setting, _news.nextSibling);
+    _news_link.parentNode.insertBefore(create_news_edit_setting, _news_link.nextSibling)
   }  
 
   
@@ -92,7 +94,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
       // _news_list.innerHTML = '読み込めませんでした。'
       // _news_save.classList.add('off')
       // _news_again.classList.remove('off')        
-    });
+    })
     
     return false
   }
@@ -153,7 +155,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
           for (i = 0; i < length_news_unit; i++) {
             const tgt = _news_unit[i],
                   date = tgt.getElementsByTagName('input')[0].value,
-                  text = tgt.getElementsByTagName('textarea')[0].value;
+                  text = tgt.getElementsByTagName('textarea')[0].value
 
             // テキストが入力されているか判別する
             if (text.trim() != '') {          
@@ -209,7 +211,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
    * 編集画面をセットする
    */
   const setNewsEdit = () => {
-    _news_list.innerHTML = '';
+    pos = window.pageYOffset
+    _news_list.innerHTML = ''
     _news_save.classList.remove('off')
     _news_again.classList.add('off')
     _news_edit.classList.remove('off')
@@ -225,6 +228,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
     _news_list.innerHTML = ''
     _news_edit.classList.add('off')
     _news_link.classList.remove('off')
+    
+    if (window.pageYOffset > pos) {
+      window.scrollTo(0, pos)      
+    }
     return false
   }
   
@@ -267,7 +274,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     _news_cancel.addEventListener('click', closeNewsEdit)
 
     // 保存する
-    _news_save.addEventListener('click', saveNews);
+    _news_save.addEventListener('click', saveNews)
   }
   
-});
+})
